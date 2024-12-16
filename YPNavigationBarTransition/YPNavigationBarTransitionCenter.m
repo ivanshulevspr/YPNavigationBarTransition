@@ -206,12 +206,14 @@ static struct {
          
          UIViewController *const toVC  = [context viewControllerForKey:UITransitionContextToViewControllerKey];
          if (showFakeBar && ctx.toVC == toVC) {
-             [toVC.view removeObserver:self
-                            forKeyPath:NSStringFromSelector(@selector(bounds))
-                               context:&ctx];
-             [toVC.view removeObserver:self
-                            forKeyPath:NSStringFromSelector(@selector(frame))
-                               context:&ctx];
+             if (toVC.view.observationInfo != nil) {
+                 [toVC.view removeObserver:self
+                                forKeyPath:NSStringFromSelector(@selector(bounds))
+                                   context:&ctx];
+                 [toVC.view removeObserver:self
+                                forKeyPath:NSStringFromSelector(@selector(frame))
+                                   context:&ctx];
+             }
          }
          
          if (self) self.isTransitionNavigationBar = NO;
